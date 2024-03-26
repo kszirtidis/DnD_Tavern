@@ -1,0 +1,123 @@
+<!-- Citation for the following rooms.hbs:
+    Date: 2/29/2024 
+    Adapted from code provided by Prof. Safonte and Dr. Curry for students at Oregon State University. Tables
+    were adapted and changed according to the needs of our database. Some comments were removed for clarity.
+    Source: https://github.com/osu-cs340-ecampus/nodejs-starter-app
+-->
+
+<h1>Rooms</h1>
+
+<nav>
+ [ <a href="/">Home</a> | <a href="/guests">Guests</a> | <a href="/employees">Employees</a> | <a href="/taverninventory">Tavern Inventory</a> | <a href="/rooms">Rooms</a> | <a href="/transactions">Transactions</a> ]
+</nav>
+
+<h2>Rooms Table</h2>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+{{!-- Create a table --}}
+
+<table id="rooms-table">
+
+    {{!-- Header section --}}
+    <thead>
+        <tr>
+            <th>Room Number</th>
+            <th>Room Type</th>
+            <th>Price</th>
+            <th>Availability</th>
+            <th>Employee ID</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    {{!-- Body section --}}
+    <tbody>
+        {{#each data}}
+        <tr>
+            <td>{{this.roomNumber}}</td>
+            <td>{{this.roomType}}</td>
+            <td>{{this.price}}</td>
+            <td>{{this.availability}}</td>
+            <td>{{this.employeeID}}</td>
+            <td><button onclick="deleteRoom({{this.roomNumber}})">Delete</button></td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+<script src="./js/delete_room.js"></script>
+ 
+<!-- /views/index.hbs -->
+
+{{!-- Form for adding a new room --}}
+<form id="add-room-form-ajax" method="post" action="/add-room-form">
+    <h2>Adding New Room to Rooms Table.</h2>
+    <p>To add a new room, please enter the information below and click 'Submit'!</p>
+    <label for="input-roomType">Room Type: </label>
+    <input type="text" name="input-roomType" id="input-roomType">
+    
+    <label for="input-price">Price: </label>
+    <input type="number" name="input-price" id="input-price">
+
+    <label for="input-availability">Availability: </label>
+    <input type="radio" name="input-availability" id="input-availability" value="0"> No
+    <input type="radio" name="input-availability" id="input-availability" value="1"> Yes
+
+    <label for="input-employeeID">Employee Name:</label>
+        <select name="input-employeeID" id="input-employeeID-ajax">
+        <option value="">Select an Employee</option>
+        {{#each employees}}
+        <option value="{{this.employeeID}}">{{this.employeeFirstName}} {{this.employeeLastName}}</option>
+        {{/each}}
+    </select>
+
+    <input type="submit">
+</form>
+
+{{!-- Embed our javascript to handle the DOM manipulation and AJAX request --}}
+<script src="./js/add_room.js"></script>
+
+{{!-- Form for searching for a specific room by room type --}}
+<form id="search-room-html" method='GET' action='/rooms'>
+    <h2>Search for a Room Using The Room Type.</h2>
+    <p>Search by room type using the field below.</p>
+    <label for="input-roomType">Search by Room Type: </label>
+    <input type="text" name="roomType" id="input-roomType-html-search">
+    <input type="submit">
+    <a href='/rooms'><button>Reset</button></a>
+</form>
+
+{{!-- Form for updating the information for a room --}}
+<form id="update-room-form-ajax">
+    <h2>Updating A Room Form</h2>
+    <p>To update a specific room select the room type from the drop-down menu on the left.</p>
+    <label for="input-roomNumber">Room: </label>
+    <select name="input-roomNumber" id="mySelect" required>
+        <option value="test">Select a Room</option>
+        {{#each data}}
+        <option>{{this.roomNumber}}</option>
+        {{/each}}
+    </select>
+
+    <label for="input-roomType">Room Type:</label>
+    <input type="text" name=" input-roomType" id="input-roomType-update" required>
+
+    <label for="input-Price">Price: </label>
+    <input type="number" name="input-Price" id="input-Price-update" required>
+
+    <label for="input-availability">Availability: </label>
+    <input type="radio" name="input-availability" id="input-availability-update" value="0" required> No
+    <input type="radio" name="input-availability" id="input-availability-update" value="1"> Yes
+    
+
+
+    <label for="input-employeeName">Employee Name:</label>
+        <select name="input-employeeName" id="input-employeeName-update">
+        <option value="">Select an Employee</option>
+        {{#each employees}}
+        <option value="{{this.employeeID}}">{{this.employeeFirstName}} {{this.employeeLastName}}</option>
+        {{/each}}
+    </select>
+    <input type="submit">
+
+</form>
+
+<script src="./js/update_room.js"></script>

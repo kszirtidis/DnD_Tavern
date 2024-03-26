@@ -1,0 +1,95 @@
+<!-- Citation for the following employees.hbs:
+    Date: 2/29/2024 
+    Adapted from code provided by Prof. Safonte and Dr. Curry for students at Oregon State University. Tables
+    were adapted and changed according to the needs of our database. Some comments were removed for clarity.
+    Source: https://github.com/osu-cs340-ecampus/nodejs-starter-app
+-->
+
+<h1>Employees</h1>
+
+<nav>
+ [ <a href="/">Home</a> | <a href="/guests">Guests</a> | <a href="/employees">Employees</a> | <a href="/taverninventory">Tavern Inventory</a> | <a href="/rooms">Rooms</a> | <a href="/transactions">Transactions</a> ]
+</nav>
+
+<h2>Employee Information</h2>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+{{!-- Create a table --}}
+<table id="employee-table">
+
+    <thead>
+        <tr>
+            <th>Employee ID</th>
+            <th>Title</th>
+            <th>Employee First Name</th>
+            <th>Employee Last Name</th>
+            <th>Service Type</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each data}}
+        <tr>
+            <td>{{this.employeeID}}</td>
+            <td>{{this.title}}</td>
+            <td>{{this.employeeFirstName}}</td>
+            <td>{{this.employeeLastName}}</td>
+            <td>{{this.serviceType}}</td>
+            <td><button onclick="deleteEmployee({{this.employeeID}}); window.location.reload()">Delete</button></td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+<script src="./js/delete_employee.js"></script>
+
+{{!-- Form for adding a new employee --}}
+<form id="add-employee-form-ajax" method="post" action="/add-employee-form">
+    <h2>Adding New Employee to Employee Information Table.</h2>
+    <p>To add a new employee, please enter their information below and click 'Submit'!</p>
+    <label for="input-title">Title: </label>
+    <input type="text" name="input-title" id="input-title" required>
+
+    <label for="input-employeeFirstName"> Employee First Name: </label>
+    <input type="text" name="input-employeeFirstName" id="input-employeeFirstName" required>
+    
+    <label for="input-employeeLastName">Employee Last Name: </label>
+    <input type="text" name="input-employeeLastName" id="input-employeeLastName" required>
+
+    <label for="input-serviceType">Service Type: </label>
+    <input type="text" name="input-serviceType" id="input-serviceType">
+
+    <input type="submit">
+</form>
+
+{{!-- Form for searching for a specific employee --}}
+<form id="search-employee-html" method='GET' action='/employees'>
+    <h2>Search for an Employee Using Their Last Name.</h2>
+    <p>Search by last name using the field below. Partial last names are OK too!</p>
+    <label for="input-employeeLastName">Search by Last Name: </label>
+    <input type="text" name="employeeLastName" id="input-employeeLastName-html-search">
+    <input type="submit">
+    <a href='/employees'><button>Reset</button></a>
+</form>
+
+{{!-- Form for updating an employee's information --}}
+<form id="update-employee-form-ajax">
+    <h2>Updating an Employee's Information Form</h2>
+    <p>To update a specific Employee's room select their name from the drop-down menu on the left</p>
+    <label for="input-employeename">Employee Name: </label>
+    <select name="input-employeename" id="mySelect">
+        <option value="test">Select an Employee</option>
+        {{#each data}}
+        <option value="{{this.employeeID}}">{{this.employeeFirstName}} {{this.employeeLastName}}</option>
+        {{/each}}
+    </select>
+
+    <label for="input-title">Title: </label>
+    <input type="text" name="input-title" id="input-title-update" required>
+
+    <label for="input-serviceType">Service Type: </label>
+    <input type="text" name="input-serviceType" id="input-serviceType-update">
+
+    <input type="submit" onclick="window.location.reload()">
+</form>
+
+<script src="./js/update_employee.js"></script>

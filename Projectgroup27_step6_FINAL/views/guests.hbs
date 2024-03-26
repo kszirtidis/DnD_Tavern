@@ -1,0 +1,120 @@
+<!-- Citation for the following guests.hbs:
+    Date: 2/29/2024 
+    Adapted from code provided by Prof. Safonte and Dr. Curry for students at Oregon State University. Tables
+    were adapted and changed according to the needs of our database. Some comments were removed for clarity.
+    Source: https://github.com/osu-cs340-ecampus/nodejs-starter-app
+-->
+
+<h1>Guest Table</h1>
+
+<nav>
+ [ <a href="/">Home</a> | <a href="/guests">Guests</a> | <a href="/employees">Employees</a> | <a href="/taverninventory">Tavern Inventory</a> | <a href="/rooms">Rooms</a> | <a href="/transactions">Transactions</a> ]
+</nav>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+{{!-- Create a table --}}
+<h2>Guest Information</h2>
+
+<table id="guest-table">
+
+    {{!-- Header section --}}
+    <thead>
+    <tr> 
+        <th>Guest ID</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Race</th>
+        <th>Class</th>
+        <th>Gold</th>
+        <th>Room Number</th>
+        <th></th>
+    </tr>
+    </thead>
+
+    {{!-- Body section --}}
+    <tbody>
+        {{#each data}}
+        <tr>
+            <td>{{this.guestID}}</td>
+            <td>{{this.firstName}}</td>
+            <td>{{this.lastName}}</td>
+            <td>{{this.race}}</td>
+            <td>{{this.class}}</td>
+            <td>{{this.gold}}</td>
+            <td>{{this.roomNumber}}</td>
+            <td><button onclick="deletePerson({{this.guestID}})">Delete</button></td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+<script src="./js/delete_person.js"></script>
+
+<!-- /views/index.hbs -->
+
+{{!-- Form to add a new guest to the guest table  --}}
+<form id="add-person-form-ajax" method="post" action="/add-person-form">
+    <h2>Adding New Guest to Guest Table.</h2>
+    <p>To add a new guest, please enter their information below and click 'Submit'!</p>
+    <label for="input-firstName">First Name: </label>
+    <input type="text" name="input-firstName" id="input-firstName" required>
+    
+    <label for="input-lastName">Last Name: </label>
+    <input type="text" name="input-lastName" id="input-lastName" required>
+
+    <label for="input-race">Race: </label>
+    <input type="text" name="input-race" id="input-race">
+
+    <label for="input-class">Class: </label>
+    <input type="text" name="input-class" id="input-class">
+
+    <label for="input-gold">Gold:</label>
+    <input type="number" name="input-gold" id="input-gold">
+
+    <label for="input-roomNumber">Room Number:</label>
+        <select name="input-roomNumber" id="input-roomNumber-ajax">
+        <option value="">Select a Room</option>
+        {{#each rooms}}
+        <option value="{{this.roomNumber}}">{{this.roomNumber}}</option>
+        {{/each}}
+    </select>
+
+    <input type="submit">
+</form>
+
+{{!-- Embed our javascript to handle the DOM manipulation and AJAX request --}}
+<script src="./js/add_person.js"></script>
+
+{{!-- Form for searching for a specific guest --}}
+<form id="search-person-html" method='GET' action='/guests'>
+    <h2>Search for a Guest Using Their Last Name.</h2>
+    <p>Search by last name using the field below. Partial last names are OK too!</p>
+    <label for="input-lastName">Search by Last Name: </label>
+    <input type="text" name="lastName" id="input-lastName-html-search">
+    <input type="submit">
+    <a href='/guests'><button>Reset</button></a>
+</form>
+
+{{!-- Form for updating information for a specific guest --}}
+<form id="update-person-form-ajax">
+    <h2>Updating A Guest's Room Form</h2>
+    <p>To update a specific Guest's room select their name from the drop-down menu on the left and their desired room from the drop down menu on the right</p>
+    <label for="input-fullname">Full name: </label>
+    <select name="input-fullname" id="mySelect">
+        <option value="test">Select a Guest</option>
+        {{#each data}}
+        <option value="{{this.guestID}}">{{this.firstName}} {{this.lastName}}</option>
+        {{/each}}
+    </select>
+
+    <label for="input-roomNumber">Room: </label>
+    <select name="input-roomNumber" id="input-roomNumber-update">
+        <option>Select a Room</option>
+        {{#each rooms}}
+        <option value="{{this.roomNumber}}">{{this.roomNumber}}</option>
+        {{/each}}
+    </select>
+    <input type="submit">
+
+</form>
+
+<script src="./js/update_person.js"></script>

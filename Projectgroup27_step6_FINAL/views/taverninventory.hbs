@@ -1,0 +1,90 @@
+<!-- Citation for the following taverninventory.hbs:
+    Date: 2/29/2024 
+    Adapted from code provided by Prof. Safonte and Dr. Curry for students at Oregon State University. Tables
+    were adapted and changed according to the needs of our database. Some comments were removed for clarity.
+    Source: https://github.com/osu-cs340-ecampus/nodejs-starter-app
+-->
+
+<h1>Tavern Inventory</h1>
+
+<nav>
+ [ <a href="/">Home</a> | <a href="/guests">Guests</a> | <a href="/employees">Employees</a> | <a href="/taverninventory">Tavern Inventory</a> | <a href="/rooms">Rooms</a> | <a href="/transactions">Transactions</a> ]
+</nav>
+
+<h2>Tavern Inventory Items and Information</h2>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+{{!-- Create a table --}}
+<table id="taverninventory-table">
+
+    <thead>
+        <tr>
+            <th>Item ID</th>
+            <th>Item Name</th>
+            <th>Quantity In Stock</th>
+            <th>Price</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each data}}
+        <tr>
+            <td>{{this.itemID}}</td>
+            <td>{{this.itemName}}</td>
+            <td>{{this.quantityInStock}}</td>
+            <td>{{this.price}}</td>
+            <td><button onclick="deleteItem({{this.itemID}})">Delete</button></td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+<script src="./js/delete_item.js"></script>
+
+{{!-- Form for adding a new item to the tavern inventory --}}
+<form id="add-item-form-ajax" method="post" action="/add-item-form">
+    <h2>Adding New Item to Tavern Inventory Table.</h2>
+    <p>To add a new item, please enter their information below and click 'Submit'!</p>
+    <label for="input-itemName">Item Name: </label>
+    <input type="text" name="input-itemName" id="input-itemName" required>
+
+    <label for="input-quantityInStock"> Quantity in Stock: </label>
+    <input type="number" name="input-quantityInStock" id="input-quantityInStock">
+    
+    <label for="input-price">Price: </label>
+    <input type="number" name="input-price" id="input-price">
+
+    <input type="submit">
+</form>
+
+{{!-- Form for searching for a specific item by item name --}}
+<form id="search-item-html" method='GET' action='/taverninventory'>
+    <h2>Search for an Item Using the Item Name.</h2>
+    <p>Search by item name using the field below.</p>
+    <label for="input-itemName">Search by Item Name: </label>
+    <input type="text" name="itemName" id="input-itemName-html-search">
+    <input type="submit">
+    <a href='/taverninventory'><button>Reset</button></a>
+</form>
+
+{{!-- Form for updating a specific item's information --}}
+<form id="update-item-form-ajax">
+    <h2>Updating an Item's Information.</h2>
+    <p>To update a specific item select the item's name from the drop-down menu on the left.</p>
+    <label for="input-itemName">Item Name: </label>
+    <select name="input-itemName" id="mySelect">
+        <option value="test">Select an Item</option>
+        {{#each data}}
+        <option value="{{this.itemID}}">{{this.itemName}}</option>
+        {{/each}}
+    </select>
+
+    <label for="input-quantityInStock"> Quantity in Stock: </label>
+    <input type="number" name="input-quantityInStock" id="input-quantityInStock-update">
+    
+    <label for="input-price">Price: </label>
+    <input type="number" name="input-price" id="input-price-update">
+
+    <input type="submit">
+</form>
+
+<script src="./js/update_item.js"></script>

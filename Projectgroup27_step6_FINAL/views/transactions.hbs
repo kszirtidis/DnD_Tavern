@@ -1,0 +1,139 @@
+<!-- Citation for the following transactions.hbs:
+    Date: 2/29/2024 
+    Adapted from code provided by Prof. Safonte and Dr. Curry for students at Oregon State University.
+    Source: https://github.com/osu-cs340-ecampus/nodejs-starter-app -->
+    
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+<h1>Transactions</h1>
+
+<nav>
+    [ <a href="/">Home</a> | <a href="/guests">Guests</a> | <a href="/employees">Employees</a> | <a href="/taverninventory">Tavern Inventory</a> | <a href="/rooms">Rooms</a> | <a href="/transactions">Transactions</a> ]
+</nav>
+
+<h2>Transactions Table</h2>
+{{!-- Create a table --}}
+<table id="transactions-table">
+
+    {{!-- Header section --}}
+    <thead>
+        <tr>
+            <th>Transaction ID</th>
+            <th>Guest ID</th>
+            <th>Guest Name</th>
+            <th>Item ID</th>
+            <th>Item Name</th>
+            <th>Quantity</th>
+            <th>Unit Price</th>
+            <th>Total Price</th>
+            <th>Transaction Date</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    {{!-- Body section --}}
+    <tbody>
+
+        {{#each data}}
+        <tr>
+            <td>{{this.transactionID}}</td>
+            <td>{{this.guestID}}</td>
+            <td>{{this.Guest}}</td>
+            <td>{{this.itemID}}</td>
+            <td>{{this.itemName}}</td>
+            <td>{{this.quantity}}</td>
+            <td>{{this.[Unit Price]}}</td>
+            <td>{{this.totalPrice}}</td>
+            <td>{{this.transactionDate}}</td>
+            <td><button onclick="deleteTransactions({{this.transactionID}})">Delete</button></td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+<script src="./js/delete_transaction.js"></script>
+
+<!-- /views/index.hbs -->
+
+{{!-- Form to add a new transaction to the transaction records --}}
+<form id="add-transaction-form-ajax" method="post" action="/add-transaction-form">
+    <h2>Add a New Transaction</h2>
+    <p>To add a new transaction, please enter their information below and click 'Submit'!</p>
+    <label for="input-guestID">Guest: </label>
+   <select name="input-guestID" id="input-guestID-ajax" required>
+    <option value="">Select a Guest</option>
+    {{#each guests}}
+    <option value="{{this.guestID}}">{{this.firstName}} {{this.lastName}}</option>
+    {{/each}}
+   </select>
+
+    <label for="input-itemID">Item: </label>
+    <select name="input-itemID" id="input-itemID-ajax">
+        <option value="">Select an Item</option>
+        {{#each items}}
+        <option value="{{this.itemID}}">{{this.itemName}}</option>
+        {{/each}}
+    </select>
+
+    <label for="input-quantity">Quantity: </label>
+    <input type="number" name="input-quantity" id="input-quantity">
+
+
+     <label for="input-transactionDate">Date: </label>
+    <input type="date" name="input-transactionDate" id="input-transactionDate">
+
+    <input type="submit">
+</form>
+
+{{!-- Embed our javascript to handle the DOM manipulation and AJAX request --}}
+<script src="./js/add_transaction.js"></script>
+
+{{!-- Form to search for a specific transaction by the guest's last name --}}
+<form id="search-transaction-html" method='GET' action='/transactions'>
+    <h2>Search for a Transaction by Guest Last Name.</h2>
+    <p>Search by guest using the field below.</p>
+    <label for="input-lastName">Search by Guest Last Name: </label>
+    <input type="text" name="lastName" id="input-lastName-html-search">
+    
+    <input type="submit">
+    <a href='/transactions'><button>Reset</button></a>
+</form>
+
+{{!-- Form for updating a specific transaction's details --}}
+<form id="update-transaction-form-ajax">
+    <h2>Updating A Transaction</h2>
+    <p>To update a transaction select their guest from the drop-down menu on the left and add the new information.</p>
+    <label for="input-transactionID">Transaction Number: </label>
+    <select name="input-transactionID" id="mySelect">
+        <option value="test">Select a Transaction</option>
+        {{#each data}}
+        <option value="{{this.transactionID}}">{{this.transactionID}}</option>
+        {{/each}}
+    </select>
+
+    <label for="input-guestID">Guest: </label>
+   <select name="input-guestID" id="input-guestID-update">
+    <option value="">Select a Guest</option>
+    {{#each guests}}
+    <option value="{{this.guestID}}">{{this.firstName}} {{this.lastName}}</option>
+    {{/each}}
+   </select>
+
+    <label for="input-itemID">Item: </label>
+    <select name="input-itemID" id="input-itemID-update">
+        <option value="">Select an Item</option>
+        {{#each items}}
+        <option value="{{this.itemID}}">{{this.itemName}}</option>
+        {{/each}}
+    </select>
+
+    <label for="input-quantity">Quantity: </label>
+    <input type="number" name="input-quantity" id="input-quantity-update">
+
+     <label for="input-transactionDate">Date: </label>
+    <input type="date" name="input-transactionDate" id="input-transactionDate-update">
+
+    <input type="submit" value="Update">
+
+</form>
+
+<script src="./js/update_transaction.js"></script>
